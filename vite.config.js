@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Changed from '/vibes-digital-media/' to '/'
-})
+  base: "/", // important for vibesdigitalmedia.com root
+});
