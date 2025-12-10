@@ -325,6 +325,14 @@ function Nav() {
           <li><a className={navLink} href="#pricing">Pricing</a></li>
           <li><a className={navLink} href="#results">Results</a></li>
           <li><a className={navLink} href="#presence">Presence</a></li>
+          <li><a className={navLink} href="#faq">FAQ</a></li>
+
+          <li>
+  <a className={navLink} href="/blog">
+    Blog
+  </a>
+</li>
+
           <li><a className={navLink} href="#contact">Contact</a></li>
           <li>
             <a
@@ -342,14 +350,16 @@ function Nav() {
         <div className="sm:hidden border-t border-white/10">
           <div className={`${container} py-6`}>
             <div className="grid gap-3">
-              {[
-                ["#services", "Services"],
-                ["#process", "Process"],
-                ["#pricing", "Pricing"],
-                ["#results", "Results"],
-                ["#presence", "Presence"],
-                ["#contact", "Contact"],
-              ].map(([href, label]) => (
+            {[
+  ["#services", "Services"],
+  ["#process", "Process"],
+  ["#pricing", "Pricing"],
+  ["#results", "Results"],
+  ["#presence", "Presence"],
+  ["#faq", "FAQ"],
+  ["/blog", "Blog"],
+  ["#contact", "Contact"],
+].map(([href, label]) => (
                 <a
                   key={href}
                   href={href}
@@ -427,53 +437,119 @@ function Hero() {
   );
 }
 
-// ---------- SERVICES ----------
+// ---------- SERVICES (SEO-optimized) ----------
 function Services() {
   const services = [
     {
-      title: "Search Engine Optimization (SEO)",
-      body: "Technical audits, on-page optimization, search-focused content, and ethical link building that compounds your organic traffic.",
+      title: "SEO Services",
+      h3: "Technical & On-Page SEO Services",
+      bullets: [
+        "Full technical SEO audit (site speed, indexability, crawl errors).",
+        "On-page optimization for core service pages and landing pages.",
+        "Keyword research focused on high-intent search terms.",
+        "Structured data, internal linking and content clean-up.",
+      ],
     },
     {
-      title: "Social Media Optimization (SMO)",
-      body: "Platform-native content, page optimization, and engagement systems that grow communities and drive conversions.",
+      title: "Social Media Management",
+      h3: "Social Media Management & SMO",
+      bullets: [
+        "Platform-native content for Instagram, Facebook, LinkedIn and TikTok.",
+        "Profile and bio optimization to match your brand positioning.",
+        "Content calendars and caption writing that drive saves, shares and clicks.",
+        "Community management and engagement systems.",
+      ],
     },
     {
-      title: "Paid Search & Social",
-      body: "High-intent Google Ads and paid social campaigns built to scale profitably with clear, transparent reporting.",
+      title: "Lead Generation Marketing",
+      h3: "Lead Generation & Funnel Design",
+      bullets: [
+        "High-converting landing pages and lead magnets.",
+        "Email nurture sequences to turn traffic into booked calls.",
+        "Multi-step funnels that combine SEO, paid ads and organic social.",
+        "Clear tracking from first click to closed-won revenue.",
+      ],
     },
     {
-      title: "Tracking, Analytics & CRO",
-      body: "Event tracking, funnels, and landing-page experiments so every click, lead, and sale is measured and improved.",
+      title: "Web Design Services",
+      h3: "Conversion-Focused Web Design Services",
+      bullets: [
+        "Modern, mobile-first layouts built for speed and clarity.",
+        "Clear calls-to-action on every page to capture leads.",
+        "SEO-ready site structure and content blocks.",
+        "Ongoing UX tweaks based on analytics and user behavior.",
+      ],
     },
   ];
+
   return (
     <Section
       id="services"
-      eyebrow="What We Do"
-      title="Performance-led SEO & SMO for modern brands"
-      desc="We blend technical search, strategic content, and thumb-stopping social to get you leads, sales, and brand demand—not just impressions."
+      eyebrow="Digital Marketing Services"
+      title="SEO, Social Media, Lead Generation & Web Design in One Growth System"
+      desc="Vibes Digital Media is a digital marketing agency that combines SEO services, social media management, lead generation marketing and web design services into a single performance framework. Instead of dealing with separate vendors, you get one team that understands your brand, your numbers and your growth targets."
     >
+      {/* Intro paragraph for search engines */}
+      <div className="mx-auto mb-10 max-w-4xl text-left text-base leading-relaxed text-white/80">
+        <p className="mb-4">
+          Our team focuses on measurable outcomes: more qualified leads, more
+          booked calls and more revenue. Whether you are a local service
+          business, consultancy or online brand, we design campaigns that tie
+          every click back to your business goals.
+        </p>
+        <p>
+          Below is an overview of our core digital marketing services. Each
+          service can be taken as a standalone engagement or combined into a
+          full growth program tailored to your market in the U.S., Europe, or
+          Africa.
+        </p>
+      </div>
+
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {services.map((s, i) => (
-          <motion.div
-            key={s.title}
+        {services.map((service, i) => (
+          <motion.article
+            key={service.title}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06, duration: 0.35 }}
             viewport={{ once: true }}
             className="rounded-2xl bg-slate-900/70 p-6 text-base text-white/85 ring-1 ring-white/10 hover:ring-teal-400/30 transition-all"
           >
-            <h3 className="mb-3 text-lg font-semibold text-teal-200">
-              {s.title}
+            <h3 className="mb-2 text-lg font-semibold text-teal-200">
+              {service.h3}
             </h3>
-            <p className="text-base text-white/70 leading-relaxed">{s.body}</p>
-          </motion.div>
+            <ul className="mt-3 space-y-2 text-sm text-white/75 leading-relaxed">
+              {service.bullets.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-teal-400" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
         ))}
+      </div>
+
+      {/* Internal-link paragraph to help SEO */}
+      <div className="mx-auto mt-10 max-w-4xl text-left text-base leading-relaxed text-white/75">
+        <p>
+          When you are ready,{" "}
+          <a href="#contact" className="text-teal-300 hover:text-teal-200">
+            book a strategy call
+          </a>{" "}
+          or review our{" "}
+          <a href="#pricing" className="text-teal-300 hover:text-teal-200">
+            digital marketing pricing packages
+          </a>
+          . We will recommend the right mix of SEO services, social media
+          management, lead generation marketing and web design services for your
+          current stage and budget.
+        </p>
       </div>
     </Section>
   );
 }
+
 
 // ---------- PROCESS ----------
 function Process() {
@@ -740,6 +816,56 @@ function Presence() {
     </Section>
   );
 }
+// ---------- FAQ (SEO-optimized) ----------
+function Faq() {
+  const faqs = [
+    {
+      q: "What types of businesses does Vibes Digital Media work with?",
+      a: "We work with service businesses, consultants, agencies, e-commerce brands and local businesses that want a clear, measurable growth strategy. Our clients are typically based in the United States, Europe, Nigeria and South Africa, but we can support other regions as well.",
+    },
+    {
+      q: "What is included in your SEO services?",
+      a: "Our SEO services include a technical SEO audit, on-page optimization, keyword research, content recommendations, internal linking, schema markup and monthly reporting. We focus on sustainable, white-hat SEO that grows your organic traffic and leads over time.",
+    },
+    {
+      q: "Do you manage social media content and engagement?",
+      a: "Yes. Our social media management services include content planning, caption writing, posting, basic creative support and light community management. We align your social media activity with campaigns that support your lead generation and sales goals.",
+    },
+    {
+      q: "Can you help us generate more leads and booked calls?",
+      a: "Lead generation is a core part of our offer. We combine SEO, paid search, paid social and conversion-focused landing pages to generate qualified leads. We can also help you build email nurture sequences and follow-up systems so more leads turn into booked calls or demos.",
+    },
+    {
+      q: "How do your pricing packages work?",
+      a: "We offer four main packages—Essential, Growth, Professional and Enterprise—so that startups and established brands can choose a level that matches their goals. Every package includes clear deliverables, transparent reporting and direct communication with our team.",
+    },
+  ];
+
+  return (
+    <Section
+      id="faq"
+      eyebrow="FAQ"
+      title="Frequently Asked Questions about Our Digital Marketing Services"
+      desc="Search engines and humans both love clarity. These answers cover how we work, who we serve and what you can expect when partnering with Vibes Digital Media."
+    >
+      <div className="mx-auto max-w-4xl space-y-6 text-left">
+        {faqs.map((item) => (
+          <article
+            key={item.q}
+            className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10"
+          >
+            <h3 className="text-lg font-semibold text-teal-200">
+              {item.q}
+            </h3>
+            <p className="mt-3 text-base leading-relaxed text-white/80">
+              {item.a}
+            </p>
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+}
 
 // ---------- CTA ----------
 function CTA() {
@@ -949,7 +1075,7 @@ export default function VibesDigitalMedia() {
 
   return (
     <RegionContext.Provider value={{ region, setRegion }}>
-      <main className="min-h-screen scroll-smooth bg-[#020817] text-white">
+            <main className="min-h-screen scroll-smooth bg-[#020817] text-white">
         <RegionBar />
         <Nav />
         <Hero />
@@ -958,6 +1084,7 @@ export default function VibesDigitalMedia() {
         <Pricing />
         <Results />
         <Presence />
+        <Faq />        {/* 👈 add this line */}
         <CTA />
         <Contact />
         <Footer />
