@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, {
   useEffect,
   useRef,
@@ -6,6 +7,7 @@ import React, {
   createContext,
 } from "react";
 import { motion, useInView } from "framer-motion";
+import { faqItems } from "./faq/faqData.js";
 
 /**
  * Vibes Digital Media
@@ -109,9 +111,34 @@ function detectRegion() {
     const lang = (navigator.language || "en-US").toUpperCase();
     const country = lang.split("-")[1] || "US";
     const EU_COUNTRIES = [
-      "FI", "SE", "NO", "DK", "DE", "FR", "NL", "BE", "ES", "IT", 
-      "PT", "IE", "AT", "GR", "PL", "CZ", "SK", "HU", "RO", "BG", 
-      "SI", "HR", "EE", "LV", "LT", "LU", "MT", "CY",
+      "FI",
+      "SE",
+      "NO",
+      "DK",
+      "DE",
+      "FR",
+      "NL",
+      "BE",
+      "ES",
+      "IT",
+      "PT",
+      "IE",
+      "AT",
+      "GR",
+      "PL",
+      "CZ",
+      "SK",
+      "HU",
+      "RO",
+      "BG",
+      "SI",
+      "HR",
+      "EE",
+      "LV",
+      "LT",
+      "LU",
+      "MT",
+      "CY",
     ];
     if (country === "US") return "US";
     if (country === "NG") return "NG";
@@ -169,7 +196,7 @@ function Section({ id, eyebrow, title, desc, children }) {
   );
 }
 
-// ---------- FORM CARD (Fixed: Consistent tint across entire form) ----------
+// ---------- FORM CARD ----------
 const FormCard = ({
   label,
   title,
@@ -200,18 +227,14 @@ const FormCard = ({
       </p>
     )}
 
-    {/* Fixed: Container with consistent tint overlay */}
+    {/* Form container */}
     <div className="relative rounded-xl border border-teal-500/20 bg-white overflow-hidden">
-      {/* Scrollable iframe */}
-      <div
-        className="overflow-y-auto"
-        style={{ maxHeight }}
-      >
+      <div className="overflow-y-auto" style={{ maxHeight }}>
         <iframe
           src={src}
           title={title}
           className="w-full relative z-0"
-          style={{ height, minHeight: '500px' }}
+          style={{ height, minHeight: "500px" }}
           frameBorder="0"
           marginHeight="0"
           marginWidth="0"
@@ -220,7 +243,6 @@ const FormCard = ({
         </iframe>
       </div>
 
-      {/* Fixed: Consistent tint overlay that covers entire form */}
       <div className="pointer-events-none absolute inset-0 z-10 bg-teal-500/15 mix-blend-multiply" />
     </div>
   </div>
@@ -287,7 +309,10 @@ function Nav() {
   }, []);
 
   const navLink =
-    "rounded-xl px-4 py-2.5 text-base font-medium text-white/90 hover:text-white hover:bg-white/5 transition-all duration-200";
+    "rounded-xl px-4 py-2.5 text-base font-medium text:white/90 hover:text-white hover:bg:white/5 transition-all duration-200".replace(
+      /:white/g,
+      ":white"
+    ); // small trick to keep classnames intact
 
   return (
     <div
@@ -320,20 +345,46 @@ function Nav() {
         </button>
 
         <ul className="hidden items-center gap-3 sm:flex">
-          <li><a className={navLink} href="#services">Services</a></li>
-          <li><a className={navLink} href="#process">Process</a></li>
-          <li><a className={navLink} href="#pricing">Pricing</a></li>
-          <li><a className={navLink} href="#results">Results</a></li>
-          <li><a className={navLink} href="#presence">Presence</a></li>
-          <li><a className={navLink} href="#faq">FAQ</a></li>
-
           <li>
-  <a className={navLink} href="/blog">
-    Blog
-  </a>
-</li>
-
-          <li><a className={navLink} href="#contact">Contact</a></li>
+            <a className={navLink} href="#services">
+              Services
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#process">
+              Process
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#pricing">
+              Pricing
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#results">
+              Results
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#faq">
+              FAQ
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#presence">
+              Presence
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="/blog">
+              Blog
+            </a>
+          </li>
+          <li>
+            <a className={navLink} href="#contact">
+              Contact
+            </a>
+          </li>
           <li>
             <a
               href="#contact"
@@ -350,16 +401,16 @@ function Nav() {
         <div className="sm:hidden border-t border-white/10">
           <div className={`${container} py-6`}>
             <div className="grid gap-3">
-            {[
-  ["#services", "Services"],
-  ["#process", "Process"],
-  ["#pricing", "Pricing"],
-  ["#results", "Results"],
-  ["#presence", "Presence"],
-  ["#faq", "FAQ"],
-  ["/blog", "Blog"],
-  ["#contact", "Contact"],
-].map(([href, label]) => (
+              {[
+                ["#services", "Services"],
+                ["#process", "Process"],
+                ["#pricing", "Pricing"],
+                ["#results", "Results"],
+                ["#faq", "FAQ"],
+                ["#presence", "Presence"],
+                ["/blog", "Blog"],
+                ["#contact", "Contact"],
+              ].map(([href, label]) => (
                 <a
                   key={href}
                   href={href}
@@ -437,119 +488,53 @@ function Hero() {
   );
 }
 
-// ---------- SERVICES (SEO-optimized) ----------
+// ---------- SERVICES ----------
 function Services() {
   const services = [
     {
-      title: "SEO Services",
-      h3: "Technical & On-Page SEO Services",
-      bullets: [
-        "Full technical SEO audit (site speed, indexability, crawl errors).",
-        "On-page optimization for core service pages and landing pages.",
-        "Keyword research focused on high-intent search terms.",
-        "Structured data, internal linking and content clean-up.",
-      ],
+      title: "Search Engine Optimization (SEO)",
+      body: "Technical audits, on-page optimization, search-focused content, and ethical link building that compounds your organic traffic.",
     },
     {
-      title: "Social Media Management",
-      h3: "Social Media Management & SMO",
-      bullets: [
-        "Platform-native content for Instagram, Facebook, LinkedIn and TikTok.",
-        "Profile and bio optimization to match your brand positioning.",
-        "Content calendars and caption writing that drive saves, shares and clicks.",
-        "Community management and engagement systems.",
-      ],
+      title: "Social Media Optimization (SMO)",
+      body: "Platform-native content, page optimization, and engagement systems that grow communities and drive conversions.",
     },
     {
-      title: "Lead Generation Marketing",
-      h3: "Lead Generation & Funnel Design",
-      bullets: [
-        "High-converting landing pages and lead magnets.",
-        "Email nurture sequences to turn traffic into booked calls.",
-        "Multi-step funnels that combine SEO, paid ads and organic social.",
-        "Clear tracking from first click to closed-won revenue.",
-      ],
+      title: "Paid Search & Social",
+      body: "High-intent Google Ads and paid social campaigns built to scale profitably with clear, transparent reporting.",
     },
     {
-      title: "Web Design Services",
-      h3: "Conversion-Focused Web Design Services",
-      bullets: [
-        "Modern, mobile-first layouts built for speed and clarity.",
-        "Clear calls-to-action on every page to capture leads.",
-        "SEO-ready site structure and content blocks.",
-        "Ongoing UX tweaks based on analytics and user behavior.",
-      ],
+      title: "Tracking, Analytics & CRO",
+      body: "Event tracking, funnels, and landing-page experiments so every click, lead, and sale is measured and improved.",
     },
   ];
-
   return (
     <Section
       id="services"
-      eyebrow="Digital Marketing Services"
-      title="SEO, Social Media, Lead Generation & Web Design in One Growth System"
-      desc="Vibes Digital Media is a digital marketing agency that combines SEO services, social media management, lead generation marketing and web design services into a single performance framework. Instead of dealing with separate vendors, you get one team that understands your brand, your numbers and your growth targets."
+      eyebrow="What We Do"
+      title="Performance-led SEO & SMO for modern brands"
+      desc="We blend technical search, strategic content, and thumb-stopping social to get you leads, sales, and brand demand—not just impressions."
     >
-      {/* Intro paragraph for search engines */}
-      <div className="mx-auto mb-10 max-w-4xl text-left text-base leading-relaxed text-white/80">
-        <p className="mb-4">
-          Our team focuses on measurable outcomes: more qualified leads, more
-          booked calls and more revenue. Whether you are a local service
-          business, consultancy or online brand, we design campaigns that tie
-          every click back to your business goals.
-        </p>
-        <p>
-          Below is an overview of our core digital marketing services. Each
-          service can be taken as a standalone engagement or combined into a
-          full growth program tailored to your market in the U.S., Europe, or
-          Africa.
-        </p>
-      </div>
-
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {services.map((service, i) => (
-          <motion.article
-            key={service.title}
+        {services.map((s, i) => (
+          <motion.div
+            key={s.title}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06, duration: 0.35 }}
             viewport={{ once: true }}
             className="rounded-2xl bg-slate-900/70 p-6 text-base text-white/85 ring-1 ring-white/10 hover:ring-teal-400/30 transition-all"
           >
-            <h3 className="mb-2 text-lg font-semibold text-teal-200">
-              {service.h3}
+            <h3 className="mb-3 text-lg font-semibold text-teal-200">
+              {s.title}
             </h3>
-            <ul className="mt-3 space-y-2 text-sm text-white/75 leading-relaxed">
-              {service.bullets.map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-teal-400" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.article>
+            <p className="text-base text-white/70 leading-relaxed">{s.body}</p>
+          </motion.div>
         ))}
-      </div>
-
-      {/* Internal-link paragraph to help SEO */}
-      <div className="mx-auto mt-10 max-w-4xl text-left text-base leading-relaxed text-white/75">
-        <p>
-          When you are ready,{" "}
-          <a href="#contact" className="text-teal-300 hover:text-teal-200">
-            book a strategy call
-          </a>{" "}
-          or review our{" "}
-          <a href="#pricing" className="text-teal-300 hover:text-teal-200">
-            digital marketing pricing packages
-          </a>
-          . We will recommend the right mix of SEO services, social media
-          management, lead generation marketing and web design services for your
-          current stage and budget.
-        </p>
       </div>
     </Section>
   );
 }
-
 
 // ---------- PROCESS ----------
 function Process() {
@@ -595,7 +580,6 @@ function Process() {
 }
 
 // ---------- PRICING ----------
-// Updated pricing structure with $199 and $299 options plus premium tier
 const plans = [
   {
     name: "Essential",
@@ -607,7 +591,7 @@ const plans = [
       "Social media profile setup",
       "Monthly performance report",
       "Email support",
-      "Up to 3 backlinks monthly"
+      "Up to 3 backlinks monthly",
     ],
   },
   {
@@ -621,7 +605,7 @@ const plans = [
       "Bi-weekly performance reports",
       "Priority email & chat support",
       "Content creation (1 blog/month)",
-      "Up to 8 quality backlinks monthly"
+      "Up to 8 quality backlinks monthly",
     ],
     highlight: true,
   },
@@ -637,7 +621,7 @@ const plans = [
       "Dedicated account manager",
       "Content creation (4 blogs/month)",
       "Conversion rate optimization",
-      "Up to 15 premium backlinks monthly"
+      "Up to 15 premium backlinks monthly",
     ],
   },
   {
@@ -654,7 +638,7 @@ const plans = [
       "PPC campaign management",
       "Competitor intelligence reports",
       "Unlimited premium backlinks",
-      "24/7 priority support"
+      "24/7 priority support",
     ],
   },
 ];
@@ -703,12 +687,8 @@ function Pricing() {
           >
             <div className="flex items-baseline justify-between gap-4 mb-4">
               <div>
-                <h3 className="text-xl font-bold text-white">
-                  {p.name}
-                </h3>
-                <p className="mt-2 text-base text-white/65">
-                  {p.tagline}
-                </p>
+                <h3 className="text-xl font-bold text-white">{p.name}</h3>
+                <p className="mt-2 text-base text-white/65">{p.tagline}</p>
               </div>
               <div className="text-right">
                 <div className="text-xl font-bold text-teal-300">
@@ -739,8 +719,12 @@ function Pricing() {
         ))}
       </div>
       <div className="mt-12 text-center text-base text-white/60">
-        <p>All packages include our proven framework and dedicated support team</p>
-        <p className="mt-2">Custom solutions available for unique business requirements</p>
+        <p>
+          All packages include our proven framework and dedicated support team
+        </p>
+        <p className="mt-2">
+          Custom solutions available for unique business requirements
+        </p>
       </div>
     </Section>
   );
@@ -786,6 +770,40 @@ function Results() {
   );
 }
 
+// ---------- FAQ SECTION (Homepage) ----------
+function FaqSection() {
+  return (
+    <Section
+      id="faq"
+      eyebrow="Questions"
+      title="FAQ: Working with Vibes Digital Media"
+      desc="Straightforward answers to the questions we hear most from founders, marketing leaders, and growing brands."
+    >
+      <div className="mx-auto max-w-4xl space-y-4 text-left">
+        {faqItems.map((item) => (
+          <details
+            key={item.question}
+            className="group rounded-2xl bg-slate-900/70 p-4 text-white/85 ring-1 ring-white/10 open:ring-teal-400/40 transition-all"
+          >
+            <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold text-teal-200">
+              <span>{item.question}</span>
+              <span className="text-sm text-teal-300 group-open:hidden">
+                +
+              </span>
+              <span className="text-sm text-teal-300 hidden group-open:inline">
+                –
+              </span>
+            </summary>
+            <p className="mt-3 text-base leading-relaxed text-white/75">
+              {item.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 // ---------- PRESENCE ----------
 function Presence() {
   return (
@@ -797,71 +815,41 @@ function Presence() {
     >
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 text-base text-white/75">
         <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">United States</div>
-          <p className="leading-relaxed">HQ & primary operations. B2B, DTC, and local service brands with nationwide reach.</p>
+          <div className="mb-3 text-lg font-semibold text-teal-200">
+            United States
+          </div>
+          <p className="leading-relaxed">
+            HQ & primary operations. B2B, DTC, and local service brands with
+            nationwide reach.
+          </p>
         </div>
         <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">Europe</div>
-          <p className="leading-relaxed">EU-ready strategies with language localization, GDPR compliance, and cultural awareness.</p>
+          <div className="mb-3 text-lg font-semibold text-teal-200">
+            Europe
+          </div>
+          <p className="leading-relaxed">
+            EU-ready strategies with language localization, GDPR compliance, and
+            cultural awareness.
+          </p>
         </div>
         <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">Nigeria</div>
-          <p className="leading-relaxed">High-growth tech, fintech, e-commerce, and retail markets with explosive potential.</p>
+          <div className="mb-3 text-lg font-semibold text-teal-200">
+            Nigeria
+          </div>
+          <p className="leading-relaxed">
+            High-growth tech, fintech, e-commerce, and retail markets with
+            explosive potential.
+          </p>
         </div>
         <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">South Africa</div>
-          <p className="leading-relaxed">Mature brands & enterprises needing sophisticated regional scaling strategies.</p>
+          <div className="mb-3 text-lg font-semibold text-teal-200">
+            South Africa
+          </div>
+          <p className="leading-relaxed">
+            Mature brands & enterprises needing sophisticated regional scaling
+            strategies.
+          </p>
         </div>
-      </div>
-    </Section>
-  );
-}
-// ---------- FAQ (SEO-optimized) ----------
-function Faq() {
-  const faqs = [
-    {
-      q: "What types of businesses does Vibes Digital Media work with?",
-      a: "We work with service businesses, consultants, agencies, e-commerce brands and local businesses that want a clear, measurable growth strategy. Our clients are typically based in the United States, Europe, Nigeria and South Africa, but we can support other regions as well.",
-    },
-    {
-      q: "What is included in your SEO services?",
-      a: "Our SEO services include a technical SEO audit, on-page optimization, keyword research, content recommendations, internal linking, schema markup and monthly reporting. We focus on sustainable, white-hat SEO that grows your organic traffic and leads over time.",
-    },
-    {
-      q: "Do you manage social media content and engagement?",
-      a: "Yes. Our social media management services include content planning, caption writing, posting, basic creative support and light community management. We align your social media activity with campaigns that support your lead generation and sales goals.",
-    },
-    {
-      q: "Can you help us generate more leads and booked calls?",
-      a: "Lead generation is a core part of our offer. We combine SEO, paid search, paid social and conversion-focused landing pages to generate qualified leads. We can also help you build email nurture sequences and follow-up systems so more leads turn into booked calls or demos.",
-    },
-    {
-      q: "How do your pricing packages work?",
-      a: "We offer four main packages—Essential, Growth, Professional and Enterprise—so that startups and established brands can choose a level that matches their goals. Every package includes clear deliverables, transparent reporting and direct communication with our team.",
-    },
-  ];
-
-  return (
-    <Section
-      id="faq"
-      eyebrow="FAQ"
-      title="Frequently Asked Questions about Our Digital Marketing Services"
-      desc="Search engines and humans both love clarity. These answers cover how we work, who we serve and what you can expect when partnering with Vibes Digital Media."
-    >
-      <div className="mx-auto max-w-4xl space-y-6 text-left">
-        {faqs.map((item) => (
-          <article
-            key={item.q}
-            className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10"
-          >
-            <h3 className="text-lg font-semibold text-teal-200">
-              {item.q}
-            </h3>
-            <p className="mt-3 text-base leading-relaxed text-white/80">
-              {item.a}
-            </p>
-          </article>
-        ))}
       </div>
     </Section>
   );
@@ -923,8 +911,9 @@ function Contact() {
           maxHeight={480}
         />
         <p className="mt-6 text-base text-slate-300 text-center leading-relaxed">
-          After submitting the form, you'll receive a confirmation from Google Forms. 
-          For immediate assistance or urgent projects, reach out directly on{" "}
+          After submitting the form, you'll receive a confirmation from Google
+          Forms. For immediate assistance or urgent projects, reach out directly
+          on{" "}
           <a
             href={WHATSAPP_LINK}
             target="_blank"
@@ -966,7 +955,7 @@ function Footer() {
           />
           <p className="mt-4 max-w-md text-lg text-white/70 leading-relaxed">
             Social & search marketing for ambitious brands. Based in Texas —
-            serving clients globally across the U.S., Europe, and Africa with 
+            serving clients globally across the U.S., Europe, and Africa with
             proven growth strategies.
           </p>
           <div className="mt-6 text-base text-white/75 space-y-2">
@@ -1014,6 +1003,11 @@ function Footer() {
               </a>
             </li>
             <li>
+              <a href="#faq" className="hover:text-white transition-colors">
+                FAQ
+              </a>
+            </li>
+            <li>
               <a href="#contact" className="hover:text-white transition-colors">
                 Contact
               </a>
@@ -1026,7 +1020,7 @@ function Footer() {
             Stay Updated
           </h4>
           <p className="text-lg text-white/70 leading-relaxed mb-4">
-            Get the latest digital marketing insights, growth strategies, and 
+            Get the latest digital marketing insights, growth strategies, and
             industry trends delivered to your inbox.
           </p>
           <div className="mt-4">
@@ -1043,8 +1037,10 @@ function Footer() {
       </div>
 
       <div className="mt-12 border-t border-white/10 py-8 text-center text-base text-white/55">
-        © {new Date().getFullYear()} Vibes Digital Media • All rights reserved • 
-        <span className="text-teal-300 ml-2">Driving Business Growth Worldwide</span>
+        © {new Date().getFullYear()} Vibes Digital Media • All rights reserved •
+        <span className="text-teal-300 ml-2">
+          Driving Business Growth Worldwide
+        </span>
       </div>
     </footer>
   );
@@ -1075,7 +1071,7 @@ export default function VibesDigitalMedia() {
 
   return (
     <RegionContext.Provider value={{ region, setRegion }}>
-            <main className="min-h-screen scroll-smooth bg-[#020817] text-white">
+      <main className="min-h-screen scroll-smooth bg-[#020817] text-white">
         <RegionBar />
         <Nav />
         <Hero />
@@ -1083,8 +1079,8 @@ export default function VibesDigitalMedia() {
         <Process />
         <Pricing />
         <Results />
+        <FaqSection />
         <Presence />
-        <Faq />        {/* 👈 add this line */}
         <CTA />
         <Contact />
         <Footer />
