@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, {
   useEffect,
   useRef,
@@ -7,12 +6,10 @@ import React, {
   createContext,
 } from "react";
 import { motion, useInView } from "framer-motion";
-import { faqItems } from "./faq/faqData.js";
 
 /**
  * Vibes Digital Media
  * Single-page marketing site with embedded Google Forms
- * Updated with consistent form overlays and standardized fonts
  */
 
 const BRAND = {
@@ -79,7 +76,7 @@ const regions = [
   {
     code: "NG",
     label: "Nigeria",
-    currency: "USD",
+    currency: "NGN",
     flag: () => (
       <svg viewBox="0 0 3 2" className="h-4 w-6 rounded-sm">
         <path fill="#008753" d="M0 0h1v2H0zM2 0h1v2H2z" />
@@ -90,7 +87,7 @@ const regions = [
   {
     code: "ZA",
     label: "South Africa",
-    currency: "USD",
+    currency: "ZAR",
     flag: () => (
       <svg viewBox="0 0 9 6" className="h-4 w-6 rounded-sm">
         <path fill="#ffb81c" d="M0 0h9v6H0z" />
@@ -102,48 +99,44 @@ const regions = [
       </svg>
     ),
   },
+  {
+    code: "RW",
+    label: "Rwanda",
+    currency: "RWF",
+    flag: () => (
+      <svg viewBox="0 0 5 3" className="h-4 w-6 rounded-sm">
+        {/* simplified Rwanda flag */}
+        <rect width="5" height="3" fill="#20603D" />
+        <rect width="5" height="2" fill="#FAD201" />
+        <rect width="5" height="1.5" fill="#00A1DE" />
+        <circle cx="4" cy="0.6" r="0.3" fill="#FAD201" />
+      </svg>
+    ),
+  },
 ];
 
 function detectRegion() {
   try {
+    // 1) Respect previously selected region
     const saved = localStorage.getItem("vdmRegion");
     if (saved) return saved;
+
+    // 2) Best-effort from browser locale (no IP tracking)
     const lang = (navigator.language || "en-US").toUpperCase();
     const country = lang.split("-")[1] || "US";
+
     const EU_COUNTRIES = [
-      "FI",
-      "SE",
-      "NO",
-      "DK",
-      "DE",
-      "FR",
-      "NL",
-      "BE",
-      "ES",
-      "IT",
-      "PT",
-      "IE",
-      "AT",
-      "GR",
-      "PL",
-      "CZ",
-      "SK",
-      "HU",
-      "RO",
-      "BG",
-      "SI",
-      "HR",
-      "EE",
-      "LV",
-      "LT",
-      "LU",
-      "MT",
-      "CY",
+      "FI","SE","NO","DK","DE","FR","NL","BE","ES","IT",
+      "PT","IE","AT","GR","PL","CZ","SK","HU","RO","BG",
+      "SI","HR","EE","LV","LT","LU","MT","CY",
     ];
+
     if (country === "US") return "US";
+    if (EU_COUNTRIES.includes(country)) return "EU";
     if (country === "NG") return "NG";
     if (country === "ZA") return "ZA";
-    if (EU_COUNTRIES.includes(country)) return "EU";
+    if (country === "RW") return "RW";
+
     return "US";
   } catch {
     return "US";
@@ -242,7 +235,6 @@ const FormCard = ({
           Loading…
         </iframe>
       </div>
-
       <div className="pointer-events-none absolute inset-0 z-10 bg-teal-500/15 mix-blend-multiply" />
     </div>
   </div>
@@ -261,7 +253,7 @@ function RegionBar() {
           <span className="uppercase tracking-[0.18em] text-white/40">
             Global presence:
           </span>
-          <span>U.S. • Europe • Nigeria • South Africa</span>
+          <span>U.S. • Europe • Nigeria • South Africa • Rwanda</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -309,10 +301,7 @@ function Nav() {
   }, []);
 
   const navLink =
-    "rounded-xl px-4 py-2.5 text-base font-medium text:white/90 hover:text-white hover:bg:white/5 transition-all duration-200".replace(
-      /:white/g,
-      ":white"
-    ); // small trick to keep classnames intact
+    "rounded-xl px-4 py-2.5 text-base font-medium text-white/90 hover:text-white hover:bg-white/5 transition-all duration-200";
 
   return (
     <div
@@ -366,11 +355,6 @@ function Nav() {
             </a>
           </li>
           <li>
-            <a className={navLink} href="#faq">
-              FAQ
-            </a>
-          </li>
-          <li>
             <a className={navLink} href="#presence">
               Presence
             </a>
@@ -406,7 +390,6 @@ function Nav() {
                 ["#process", "Process"],
                 ["#pricing", "Pricing"],
                 ["#results", "Results"],
-                ["#faq", "FAQ"],
                 ["#presence", "Presence"],
                 ["/blog", "Blog"],
                 ["#contact", "Contact"],
@@ -473,7 +456,6 @@ function Hero() {
             </div>
           </div>
 
-          {/* Free Mini Audit Form */}
           <FormCard
             label="Free Audit"
             title="Get a Free Mini Audit in 24 Hours"
@@ -643,16 +625,20 @@ const plans = [
   },
 ];
 
+// FX multipliers – approximate, tweak anytime
 function formatPrice(region, base) {
   switch (region) {
     case "EU":
-      return `€${Math.round(base * 0.9).toLocaleString()}/mo`;
+      return `€${Math.round(base * 0.9).toLocaleString()} EUR/mo`;
     case "NG":
+      return `₦${Math.round(base * 1600).toLocaleString()} NGN/mo`;
     case "ZA":
-      return `$${Math.round(base * 0.7).toLocaleString()} USD/mo`;
+      return `R${Math.round(base * 19).toLocaleString()} ZAR/mo`;
+    case "RW":
+      return `Fr${Math.round(base * 1350).toLocaleString()} RWF/mo`;
     case "US":
     default:
-      return `$${base.toLocaleString()}/mo`;
+      return `$${base.toLocaleString()} USD/mo`;
   }
 }
 
@@ -666,11 +652,22 @@ function Pricing() {
       title="Transparent Pricing for Every Business Stage"
       desc="Choose the plan that matches your growth ambitions. All packages include our proven strategies and dedicated support."
     >
-      <div className="mb-12 text-center">
+      <div className="mb-4 text-center">
         <p className="text-lg text-teal-200 font-semibold">
           💡 <strong>Special Offer:</strong> First month 20% off for new clients
         </p>
+        <p className="mt-2 text-sm text-white/60 inline-flex items-center gap-1">
+          Prices in your selected region are{" "}
+          <span
+            className="underline decoration-dotted cursor-help"
+            title="Local currency prices are approximate conversions from our USD base rates and may change with exchange rates."
+          >
+            approximate conversions from USD
+          </span>
+          .
+        </p>
       </div>
+
       <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((p, i) => (
           <motion.div
@@ -718,10 +715,9 @@ function Pricing() {
           </motion.div>
         ))}
       </div>
+
       <div className="mt-12 text-center text-base text-white/60">
-        <p>
-          All packages include our proven framework and dedicated support team
-        </p>
+        <p>All packages include our proven framework and dedicated support team</p>
         <p className="mt-2">
           Custom solutions available for unique business requirements
         </p>
@@ -770,40 +766,6 @@ function Results() {
   );
 }
 
-// ---------- FAQ SECTION (Homepage) ----------
-function FaqSection() {
-  return (
-    <Section
-      id="faq"
-      eyebrow="Questions"
-      title="FAQ: Working with Vibes Digital Media"
-      desc="Straightforward answers to the questions we hear most from founders, marketing leaders, and growing brands."
-    >
-      <div className="mx-auto max-w-4xl space-y-4 text-left">
-        {faqItems.map((item) => (
-          <details
-            key={item.question}
-            className="group rounded-2xl bg-slate-900/70 p-4 text-white/85 ring-1 ring-white/10 open:ring-teal-400/40 transition-all"
-          >
-            <summary className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold text-teal-200">
-              <span>{item.question}</span>
-              <span className="text-sm text-teal-300 group-open:hidden">
-                +
-              </span>
-              <span className="text-sm text-teal-300 hidden group-open:inline">
-                –
-              </span>
-            </summary>
-            <p className="mt-3 text-base leading-relaxed text-white/75">
-              {item.answer}
-            </p>
-          </details>
-        ))}
-      </div>
-    </Section>
-  );
-}
-
 // ---------- PRESENCE ----------
 function Presence() {
   return (
@@ -824,9 +786,7 @@ function Presence() {
           </p>
         </div>
         <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">
-            Europe
-          </div>
+          <div className="mb-3 text-lg font-semibold text-teal-200">Europe</div>
           <p className="leading-relaxed">
             EU-ready strategies with language localization, GDPR compliance, and
             cultural awareness.
@@ -848,6 +808,15 @@ function Presence() {
           <p className="leading-relaxed">
             Mature brands & enterprises needing sophisticated regional scaling
             strategies.
+          </p>
+        </div>
+        <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
+          <div className="mb-3 text-lg font-semibold text-teal-200">
+            Rwanda
+          </div>
+          <p className="leading-relaxed">
+            Emerging hub for tech, tourism, and professional services where
+            digital-first strategies create an outsized competitive edge.
           </p>
         </div>
       </div>
@@ -988,27 +957,34 @@ function Footer() {
           </h4>
           <ul className="grid gap-3 text-base text-white/70">
             <li>
-              <a href="#services" className="hover:text-white transition-colors">
+              <a
+                href="#services"
+                className="hover:text-white transition-colors"
+              >
                 What We Do
               </a>
             </li>
             <li>
-              <a href="#results" className="hover:text-white transition-colors">
+              <a
+                href="#results"
+                className="hover:text-white transition-colors"
+              >
                 Case Studies
               </a>
             </li>
             <li>
-              <a href="#pricing" className="hover:text-white transition-colors">
+              <a
+                href="#pricing"
+                className="hover:text-white transition-colors"
+              >
                 Pricing
               </a>
             </li>
             <li>
-              <a href="#faq" className="hover:text-white transition-colors">
-                FAQ
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="hover:text-white transition-colors">
+              <a
+                href="#contact"
+                className="hover:text-white transition-colors"
+              >
                 Contact
               </a>
             </li>
@@ -1079,7 +1055,6 @@ export default function VibesDigitalMedia() {
         <Process />
         <Pricing />
         <Results />
-        <FaqSection />
         <Presence />
         <CTA />
         <Contact />
