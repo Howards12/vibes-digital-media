@@ -682,22 +682,24 @@ function Pricing() {
                 : "bg-slate-900/80 ring-white/10 hover:ring-teal-400/30"
             }`}
           >
-            <div className="flex items-baseline justify-between gap-4 mb-4">
-              <div>
-                <h3 className="text-xl font-bold text-white">{p.name}</h3>
-                <p className="mt-2 text-base text-white/65">{p.tagline}</p>
-              </div>
-              <div className="text-right">
-                <div className="text-xl font-bold text-teal-300">
-                  {formatPrice(region, p.base)}
-                </div>
-                {p.highlight && (
-                  <div className="text-sm text-teal-200 font-semibold mt-2 bg-teal-800/50 px-3 py-1 rounded-full">
-                    Most Popular
-                  </div>
-                )}
-              </div>
-            </div>
+            <div className="mb-4 space-y-2">
+  <h3 className="text-xl font-bold text-white">{p.name}</h3>
+
+  <p className="text-base text-white/65">
+    {p.tagline}
+  </p>
+
+  <div className="text-lg font-bold text-teal-300 leading-snug break-words">
+    {formatPrice(region, p.base)}
+  </div>
+
+  {p.highlight && (
+    <div className="inline-block text-xs sm:text-sm text-teal-200 font-semibold mt-1 bg-teal-800/60 px-3 py-1 rounded-full">
+      Most Popular
+    </div>
+  )}
+</div>
+
             <ul className="flex-1 space-y-3 text-base text-white/75 mb-6">
               {p.features.map((f) => (
                 <li key={f} className="flex gap-3 items-start">
