@@ -6,10 +6,12 @@ import React, {
   createContext,
 } from "react";
 import { motion, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 
 /**
  * Vibes Digital Media
  * Single-page marketing site with embedded Google Forms
+ * Updated with consistent form overlays and standardized fonts
  */
 
 const BRAND = {
@@ -76,7 +78,7 @@ const regions = [
   {
     code: "NG",
     label: "Nigeria",
-    currency: "NGN",
+    currency: "USD",
     flag: () => (
       <svg viewBox="0 0 3 2" className="h-4 w-6 rounded-sm">
         <path fill="#008753" d="M0 0h1v2H0zM2 0h1v2H2z" />
@@ -87,7 +89,7 @@ const regions = [
   {
     code: "ZA",
     label: "South Africa",
-    currency: "ZAR",
+    currency: "USD",
     flag: () => (
       <svg viewBox="0 0 9 6" className="h-4 w-6 rounded-sm">
         <path fill="#ffb81c" d="M0 0h9v6H0z" />
@@ -99,44 +101,48 @@ const regions = [
       </svg>
     ),
   },
-  {
-    code: "RW",
-    label: "Rwanda",
-    currency: "RWF",
-    flag: () => (
-      <svg viewBox="0 0 5 3" className="h-4 w-6 rounded-sm">
-        {/* simplified Rwanda flag */}
-        <rect width="5" height="3" fill="#20603D" />
-        <rect width="5" height="2" fill="#FAD201" />
-        <rect width="5" height="1.5" fill="#00A1DE" />
-        <circle cx="4" cy="0.6" r="0.3" fill="#FAD201" />
-      </svg>
-    ),
-  },
 ];
 
 function detectRegion() {
   try {
-    // 1) Respect previously selected region
     const saved = localStorage.getItem("vdmRegion");
     if (saved) return saved;
-
-    // 2) Best-effort from browser locale (no IP tracking)
     const lang = (navigator.language || "en-US").toUpperCase();
     const country = lang.split("-")[1] || "US";
-
     const EU_COUNTRIES = [
-      "FI","SE","NO","DK","DE","FR","NL","BE","ES","IT",
-      "PT","IE","AT","GR","PL","CZ","SK","HU","RO","BG",
-      "SI","HR","EE","LV","LT","LU","MT","CY",
+      "FI",
+      "SE",
+      "NO",
+      "DK",
+      "DE",
+      "FR",
+      "NL",
+      "BE",
+      "ES",
+      "IT",
+      "PT",
+      "IE",
+      "AT",
+      "GR",
+      "PL",
+      "CZ",
+      "SK",
+      "HU",
+      "RO",
+      "BG",
+      "SI",
+      "HR",
+      "EE",
+      "LV",
+      "LT",
+      "LU",
+      "MT",
+      "CY",
     ];
-
     if (country === "US") return "US";
-    if (EU_COUNTRIES.includes(country)) return "EU";
     if (country === "NG") return "NG";
     if (country === "ZA") return "ZA";
-    if (country === "RW") return "RW";
-
+    if (EU_COUNTRIES.includes(country)) return "EU";
     return "US";
   } catch {
     return "US";
@@ -189,7 +195,7 @@ function Section({ id, eyebrow, title, desc, children }) {
   );
 }
 
-// ---------- FORM CARD ----------
+// ---------- FORM CARD (Fixed: Consistent tint across entire form) ----------
 const FormCard = ({
   label,
   title,
@@ -220,8 +226,9 @@ const FormCard = ({
       </p>
     )}
 
-    {/* Form container */}
+    {/* Fixed: Container with consistent tint overlay */}
     <div className="relative rounded-xl border border-teal-500/20 bg-white overflow-hidden">
+      {/* Scrollable iframe */}
       <div className="overflow-y-auto" style={{ maxHeight }}>
         <iframe
           src={src}
@@ -235,6 +242,8 @@ const FormCard = ({
           Loading…
         </iframe>
       </div>
+
+      {/* Fixed: Consistent tint overlay that covers entire form */}
       <div className="pointer-events-none absolute inset-0 z-10 bg-teal-500/15 mix-blend-multiply" />
     </div>
   </div>
@@ -253,7 +262,7 @@ function RegionBar() {
           <span className="uppercase tracking-[0.18em] text-white/40">
             Global presence:
           </span>
-          <span>U.S. • Europe • Nigeria • South Africa • Rwanda</span>
+          <span>U.S. • Europe • Nigeria • South Africa</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -359,11 +368,14 @@ function Nav() {
               Presence
             </a>
           </li>
+
+          {/* ✅ Blog: changed to React Router Link */}
           <li>
-            <a className={navLink} href="/blog">
+            <Link className={navLink} to="/blog">
               Blog
-            </a>
+            </Link>
           </li>
+
           <li>
             <a className={navLink} href="#contact">
               Contact
@@ -391,17 +403,29 @@ function Nav() {
                 ["#pricing", "Pricing"],
                 ["#results", "Results"],
                 ["#presence", "Presence"],
-                ["/blog", "Blog"],
+                ["/blog", "Blog"], // ✅ handled below
                 ["#contact", "Contact"],
-              ].map(([href, label]) => (
-                <a
-                  key={href}
-                  href={href}
-                  className="rounded-xl bg-white/5 px-6 py-4 text-base font-medium text-white hover:bg-white/10 transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
+              ].map(([href, label]) =>
+                href === "/blog" ? (
+                  <Link
+                    key={href}
+                    to="/blog"
+                    className="rounded-xl bg-white/5 px-6 py-4 text-base font-medium text-white hover:bg-white/10 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                ) : (
+                  <a
+                    key={href}
+                    href={href}
+                    className="rounded-xl bg-white/5 px-6 py-4 text-base font-medium text-white hover:bg-white/10 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {label}
+                  </a>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -456,6 +480,7 @@ function Hero() {
             </div>
           </div>
 
+          {/* Free Mini Audit Form */}
           <FormCard
             label="Free Audit"
             title="Get a Free Mini Audit in 24 Hours"
@@ -562,6 +587,7 @@ function Process() {
 }
 
 // ---------- PRICING ----------
+// Updated pricing structure with $199 and $299 options plus premium tier
 const plans = [
   {
     name: "Essential",
@@ -625,20 +651,16 @@ const plans = [
   },
 ];
 
-// FX multipliers – approximate, tweak anytime
 function formatPrice(region, base) {
   switch (region) {
     case "EU":
-      return `€${Math.round(base * 0.9).toLocaleString()} EUR/mo`;
+      return `€${Math.round(base * 0.9).toLocaleString()}/mo`;
     case "NG":
-      return `₦${Math.round(base * 1600).toLocaleString()} NGN/mo`;
     case "ZA":
-      return `R${Math.round(base * 19).toLocaleString()} ZAR/mo`;
-    case "RW":
-      return `Fr${Math.round(base * 1350).toLocaleString()} RWF/mo`;
+      return `$${Math.round(base * 0.7).toLocaleString()} USD/mo`;
     case "US":
     default:
-      return `$${base.toLocaleString()} USD/mo`;
+      return `$${base.toLocaleString()}/mo`;
   }
 }
 
@@ -652,22 +674,11 @@ function Pricing() {
       title="Transparent Pricing for Every Business Stage"
       desc="Choose the plan that matches your growth ambitions. All packages include our proven strategies and dedicated support."
     >
-      <div className="mb-4 text-center">
+      <div className="mb-12 text-center">
         <p className="text-lg text-teal-200 font-semibold">
           💡 <strong>Special Offer:</strong> First month 20% off for new clients
         </p>
-        <p className="mt-2 text-sm text-white/60 inline-flex items-center gap-1">
-          Prices in your selected region are{" "}
-          <span
-            className="underline decoration-dotted cursor-help"
-            title="Local currency prices are approximate conversions from our USD base rates and may change with exchange rates."
-          >
-            approximate conversions from USD
-          </span>
-          .
-        </p>
       </div>
-
       <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         {plans.map((p, i) => (
           <motion.div
@@ -682,24 +693,22 @@ function Pricing() {
                 : "bg-slate-900/80 ring-white/10 hover:ring-teal-400/30"
             }`}
           >
-            <div className="mb-4 space-y-2">
-  <h3 className="text-xl font-bold text-white">{p.name}</h3>
-
-  <p className="text-base text-white/65">
-    {p.tagline}
-  </p>
-
-  <div className="text-lg font-bold text-teal-300 leading-snug break-words">
-    {formatPrice(region, p.base)}
-  </div>
-
-  {p.highlight && (
-    <div className="inline-block text-xs sm:text-sm text-teal-200 font-semibold mt-1 bg-teal-800/60 px-3 py-1 rounded-full">
-      Most Popular
-    </div>
-  )}
-</div>
-
+            <div className="flex items-baseline justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-white">{p.name}</h3>
+                <p className="mt-2 text-base text-white/65">{p.tagline}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-xl font-bold text-teal-300">
+                  {formatPrice(region, p.base)}
+                </div>
+                {p.highlight && (
+                  <div className="text-sm text-teal-200 font-semibold mt-2 bg-teal-800/50 px-3 py-1 rounded-full">
+                    Most Popular
+                  </div>
+                )}
+              </div>
+            </div>
             <ul className="flex-1 space-y-3 text-base text-white/75 mb-6">
               {p.features.map((f) => (
                 <li key={f} className="flex gap-3 items-start">
@@ -717,9 +726,10 @@ function Pricing() {
           </motion.div>
         ))}
       </div>
-
       <div className="mt-12 text-center text-base text-white/60">
-        <p>All packages include our proven framework and dedicated support team</p>
+        <p>
+          All packages include our proven framework and dedicated support team
+        </p>
         <p className="mt-2">
           Custom solutions available for unique business requirements
         </p>
@@ -810,15 +820,6 @@ function Presence() {
           <p className="leading-relaxed">
             Mature brands & enterprises needing sophisticated regional scaling
             strategies.
-          </p>
-        </div>
-        <div className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all">
-          <div className="mb-3 text-lg font-semibold text-teal-200">
-            Rwanda
-          </div>
-          <p className="leading-relaxed">
-            Emerging hub for tech, tourism, and professional services where
-            digital-first strategies create an outsized competitive edge.
           </p>
         </div>
       </div>
@@ -959,34 +960,22 @@ function Footer() {
           </h4>
           <ul className="grid gap-3 text-base text-white/70">
             <li>
-              <a
-                href="#services"
-                className="hover:text-white transition-colors"
-              >
+              <a href="#services" className="hover:text-white transition-colors">
                 What We Do
               </a>
             </li>
             <li>
-              <a
-                href="#results"
-                className="hover:text-white transition-colors"
-              >
+              <a href="#results" className="hover:text-white transition-colors">
                 Case Studies
               </a>
             </li>
             <li>
-              <a
-                href="#pricing"
-                className="hover:text-white transition-colors"
-              >
+              <a href="#pricing" className="hover:text-white transition-colors">
                 Pricing
               </a>
             </li>
             <li>
-              <a
-                href="#contact"
-                className="hover:text-white transition-colors"
-              >
+              <a href="#contact" className="hover:text-white transition-colors">
                 Contact
               </a>
             </li>
