@@ -1,50 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { RegionProvider } from "../context/RegionContext.jsx";
+import Layout from "../components/Layout.jsx";
+import Section from "../components/Section.jsx";
+
+const FEED =
+  "https://script.google.com/macros/s/AKfycbyD1VoJvYLbMpysqkf-SIQWmhMGNqCkddNj55KmsPJZHuhkFzbcsVSye4omPM7_H8jF/exec";
 
 export default function BlogList() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("https://script.google.com/macros/s/AKfycbyD1VoJvYLbMpysqkf-SIQWmhMGNqCkddNj55KmsPJZHuhkFzbcsVSye4omPM7_H8jF/exec")
-      .then(res => res.json())
-      .then(data => {
-        if (!data.posts) return;
-        const sorted = data.posts.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-        setPosts(sorted);
-      });
+    fetch(FEED)
+      .then((r) => r.json())
+      .then((data) => setPosts(data?.posts || []))
+      .catch(() => setPosts([]));
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-16 text-white">
-      <h1 className="text-4xl font-bold mb-10">Vibes Digital Media Blog</h1>
-
-      <div className="grid gap-10">
-        {posts.map(post => (
-          <div
-            key={post.slug}
-            className="bg-slate-900/70 p-6 rounded-xl ring-1 ring-white/10 hover:ring-teal-400 transition"
-          >
-            <h2 className="text-2xl font-bold text-teal-300">{post.title}</h2>
-
-            <p className="text-sm text-white/60 mt-1">
-              {new Date(post.date).toDateString()}
-            </p>
-
-            <p className="mt-4 text-white/80 line-clamp-3">
-              {post.content.substring(0, 150)}...
-            </p>
-
-            <Link
-              to={`/blog/${post.slug}`}
-              className="inline-block mt-4 text-teal-300 font-semibold hover:text-teal-200"
-            >
-              Read More →
-            </Link>
+    <RegionProvider>
+      <Layout>
+        <Section
+          eyebrow="Blog"
+          title="Growth insights & marketing playbooks"
+          desc="SEO, social, and conversion strategy — in plain English."
+        >
+          <div className="mx-auto max-w-4xl grid gap-4">
+            {posts.map((p) => (
+              <Link
+                key={p.slug}
+                to={`/blog/${p.slug}`}
+                className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:ring-teal-400/30 transition-all"
+              >
+                <h3 className="text-xl font-semibold text-teal-200">{p.title}</h3>
+                <p className="mt-2 text-sm text-white/60">
+                  {p.date ? new Date(p.date).toDateString() : ""}
+                </p>
+                <p className="mt-3 text-white/70 leading-relaxed line-clamp-2">
+                  {p.excerpt || p.content?.slice(0, 140) || ""}
+                </p>
+              </Link>
+            ))}
+            {!posts.length && (
+              <div className="text-white/70 text-center py-10">
+                No posts yet.
+              </div>
+            )}
           </div>
-        ))}
-      </div>
-    </div>
+        </Section>
+      </Layout>
+    </RegionProvider>
   );
 }
