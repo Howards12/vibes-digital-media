@@ -1,29 +1,24 @@
 import React from "react";
 import Section from "./Section.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
+import { useInView } from "../hooks/useInView.js";
+import { presenceTiles } from "../data/presenceData.js";
 
 export default function Presence() {
-  const tiles = [
-    {
-      title: "United States",
-      body: "HQ & primary operations. B2B, DTC, and local service brands with nationwide reach.",
+  const { theme } = useTheme();
+  const [containerRef, isContainerInView] = useInView({ threshold: 0.1 });
+  const cardThemeClasses = {
+    light: {
+      card: "bg-white ring-1 ring-gray-200 hover:bg-gray-50",
+      title: "text-teal-600",
+      body: "text-gray-600",
     },
-    {
-      title: "Europe",
-      body: "EU-ready strategies with localization, GDPR awareness, and cultural nuance.",
+    dark: {
+      card: "bg-slate-900/80 ring-1 ring-white/10 hover:bg-slate-900/70",
+      title: "text-teal-200",
+      body: "text-white/70",
     },
-    {
-      title: "Nigeria",
-      body: "High-growth tech, fintech, e-commerce, and retail markets with explosive potential.",
-    },
-    {
-      title: "South Africa",
-      body: "Mature brands & enterprises needing sophisticated regional scaling strategies.",
-    },
-    {
-      title: "Rwanda",
-      body: "Fast-growing innovation ecosystem — ideal for modern brands scaling in East Africa.",
-    },
-  ];
+  };
 
   return (
     <Section
@@ -32,14 +27,20 @@ export default function Presence() {
       title="Local nuance, global coverage"
       desc="Tailored strategies per region."
     >
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5 text-base text-white/75">
-        {tiles.map((t) => (
+      <div ref={containerRef} className="grid gap-6 md:grid-cols-2 lg:grid-cols-5 text-base">
+        {presenceTiles.map((tile, index) => (
           <div
-            key={t.title}
-            className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:bg-slate-900/70 transition-all"
+            key={tile.title}
+            className={`rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-1 ${
+              cardThemeClasses[theme].card
+            } ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <div className="mb-3 text-lg font-semibold text-teal-200">{t.title}</div>
-            <p className="leading-relaxed">{t.body}</p>
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-2xl">{tile.flag}</span>
+              <h3 className={`text-lg font-semibold ${cardThemeClasses[theme].title}`}>{tile.title}</h3>
+            </div>
+            <p className={`leading-relaxed ${cardThemeClasses[theme].body}`}>{tile.body}</p>
           </div>
         ))}
       </div>

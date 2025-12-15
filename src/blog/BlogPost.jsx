@@ -1,70 +1,71 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { RegionProvider } from "../context/RegionContext.jsx";
-import Layout from "../components/Layout.jsx";
-import Section from "../components/Section.jsx";
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext.jsx";
+import ReactMarkdown from "react-markdown";
+import { useBlogData } from "../hooks/useBlogData.js";
 
-const FEED =
-  "https://script.google.com/macros/s/AKfycbyD1VoJvYLbMpysqkf-SIQWmhMGNqCkddNj55KmsPJZHuhkFzbcsVSye4omPM7_H8jF/exec";
+const container = "mx-auto max-w-3xl px-4";
 
 export default function BlogPost() {
   const { slug } = useParams();
-  const [post, setPost] = useState(null);
+  const { theme } = useTheme();
+  const { posts, loading, error } = useBlogData();
+  const post = posts.find((p) => p.slug === slug);
 
-  useEffect(() => {
-    fetch(FEED)
-      .then((res) => res.json())
-      .then((data) => {
-        const match = data?.posts?.find((p) => p.slug === slug);
-        setPost(match || null);
-      })
-      .catch(() => setPost(null));
-  }, [slug]);
+  const linkThemeClasses = theme === 'dark' ? 'text-teal-200 hover:underline' : 'text-teal-600 hover:underline';
 
-  const blogSchema = useMemo(() => {
-    if (!post) return null;
-    return {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: post.title,
-      datePublished: post.date,
-      dateModified: post.date,
-      author: { "@type": "Organization", name: "Vibes Digital Media" },
-      mainEntityOfPage: { "@type": "WebPage", "@id": `/#/blog/${post.slug}` },
-    };
-  }, [post]);
+  if (loading) {
+    return <div className="text-center py-16">Loading post...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-16 text-red-500">Failed to load post.</div>;
+  }
+
+  if (!post) {
+    // Note: The 'not found' page will also adopt the theme.
+    // This page will now also be theme-aware.
+    return (
+      <div className="min-h-screen">
+        <div className={`${container} py-16`}>
+          <p className={theme === 'dark' ? 'text-white/70' : 'text-gray-600'}>Post not found.</p>
+          <Link to="/blog" className={`mt-4 inline-block ${linkThemeClasses}`}>
+            ← Back to Blog
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    url: `https://www.vibesdigitalmedia.com/#/blog/${post.slug}`,
+    author: { "@type": "Organization", name: "Vibes Digital Media" },
+    publisher: { "@type": "Organization", name: "Vibes Digital Media" },
+  };
 
   return (
-    <RegionProvider>
-      <Layout>
-        <Section>
-          <div className="mx-auto max-w-4xl">
-            <Link to="/blog" className="text-teal-300 hover:text-teal-200 mb-6 block">
-              ← Back to Blog
-            </Link>
+    <div className="min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-            {!post ? (
-              <div className="text-center text-white/70 py-20">Loading…</div>
-            ) : (
-              <>
-                <h1 className="text-4xl font-bold text-teal-300">{post.title}</h1>
-                <p className="mt-2 text-white/60">{new Date(post.date).toDateString()}</p>
+      <div className={`${container} py-16`}>
+        <Link to="/blog" className={`text-sm ${linkThemeClasses}`}>
+          ← Back to Blog
+        </Link>
 
-                <div className="mt-8 text-white/80 leading-relaxed whitespace-pre-line">
-                  {post.content}
-                </div>
+        <h1 className="mt-4 text-3xl font-extrabold">{post.title}</h1>
+        <p className={`mt-2 text-sm ${theme === 'dark' ? 'text-white/60' : 'text-gray-500'}`}>
+          {post.date}
+        </p>
 
-                {blogSchema && (
-                  <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
-                  />
-                )}
-              </>
-            )}
-          </div>
-        </Section>
-      </Layout>
-    </RegionProvider>
+        <div className={`prose ${theme === 'dark' ? 'prose-invert' : ''} mt-8 max-w-none`}>
+          <ReactMarkdown>{post.content}</ReactMarkdown>
+        </div>
+      </div>
+    </div>
   );
 }

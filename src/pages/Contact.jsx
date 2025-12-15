@@ -1,30 +1,28 @@
 import React from "react";
-import { RegionProvider } from "../context/RegionContext.jsx";
-import Layout from "../components/Layout.jsx";
 import Section from "../components/Section.jsx";
-import FormCard from "../components/FormCard.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function ContactPage() {
   return (
-    <RegionProvider>
-      <Layout>
-        <Section
-          eyebrow="Get Started"
-          title="Let’s discuss your growth"
-          desc="Send your details — we’ll respond with next steps."
-        >
-          <div className="mx-auto max-w-4xl">
-            <FormCard
-              label="Contact Us"
-              title="Start Your Growth Journey"
-              subtitle="Share your details and we’ll craft a personalized strategy."
-              src="https://docs.google.com/forms/d/e/1FAIpQLSdVzQxBo_f8TiYvZ2HOTBOPcbpTgBp6N5rPWhlbf07LlVzFPA/viewform?embedded=true"
-              height={1793}
-              maxHeight={520}
-            />
-          </div>
-        </Section>
-      </Layout>
-    </RegionProvider>
+    <main>
+      <Section
+        eyebrow="Contact Us"
+        title="Let's Build Your Growth Engine"
+        desc="Fill out the form below, and we'll get back to you within 24 hours to schedule your free strategy call."
+      >
+        <div className="mx-auto max-w-2xl">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSdVzQxBo_f8TiYvZ2HOTBOPcbpTgBp6N5rPWhlbf07LlVzFPA/viewform?embedded=true"
+            width="100%"
+            height="1200"
+            frameBorder="0"
+            marginHeight="0"
+            marginWidth="0"
+          >
+            Loading…
+          </iframe>
+        </div>
+      </Section>
+    </main>
   );
 }

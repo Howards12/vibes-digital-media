@@ -1,23 +1,39 @@
 import React from "react";
 import Section from "./Section.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
+import { useInView } from "../hooks/useInView.js";
+import { resultsStats } from "../data/resultsData.js";
 
 export default function Results() {
-  const stats = [
-    { k: "+220%", l: "Organic traffic uplift in 6–9 months for service brands." },
-    { k: "3x", l: "More qualified leads from paid + organic working together." },
-    { k: "50k+", l: "New followers driven via optimized social campaigns." },
-  ];
+  const { theme } = useTheme();
+  const [containerRef, isContainerInView] = useInView({ threshold: 0.1 });
+
+  const cardThemeClasses = {
+    light: {
+      card: "bg-white ring-1 ring-gray-200 hover:bg-gray-50",
+      stat: "text-teal-500",
+      label: "text-gray-600",
+    },
+    dark: {
+      card: "bg-slate-900/80 ring-1 ring-white/10 hover:bg-slate-900/70",
+      stat: "text-teal-300",
+      label: "text-white/70",
+    },
+  };
 
   return (
     <Section id="results" eyebrow="Proof" title="Built for measurable growth">
-      <div className="grid gap-8 md:grid-cols-3">
-        {stats.map((s) => (
+      <div ref={containerRef} className="grid gap-8 md:grid-cols-3">
+        {resultsStats.map((statItem, index) => (
           <div
-            key={s.k}
-            className="rounded-2xl bg-slate-900/80 p-8 text-white/80 ring-1 ring-white/10 text-center hover:bg-slate-900/70 transition-all"
+            key={statItem.stat}
+            className={`rounded-2xl p-8 text-center transition-all duration-500 ease-out hover:-translate-y-1 ${
+              cardThemeClasses[theme].card
+            } ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <div className="text-3xl font-extrabold text-teal-300 mb-4">{s.k}</div>
-            <p className="text-lg text-white/70 leading-relaxed">{s.l}</p>
+            <div className={`mb-4 text-3xl font-extrabold ${cardThemeClasses[theme].stat}`}>{statItem.stat}</div>
+            <p className={`text-lg leading-relaxed ${cardThemeClasses[theme].label}`}>{statItem.label}</p>
           </div>
         ))}
       </div>

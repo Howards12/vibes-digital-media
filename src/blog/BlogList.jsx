@@ -1,54 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { RegionProvider } from "../context/RegionContext.jsx";
-import Layout from "../components/Layout.jsx";
-import Section from "../components/Section.jsx";
+import { posts } from "./posts.js"; // ✅ Correct: Uses curly braces
 
-const FEED =
-  "https://script.google.com/macros/s/AKfycbyD1VoJvYLbMpysqkf-SIQWmhMGNqCkddNj55KmsPJZHuhkFzbcsVSye4omPM7_H8jF/exec";
+const container = "mx-auto max-w-6xl px-4";
 
 export default function BlogList() {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch(FEED)
-      .then((r) => r.json())
-      .then((data) => setPosts(data?.posts || []))
-      .catch(() => setPosts([]));
-  }, []);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Vibes Digital Media Blog",
+    url: "https://www.vibesdigitalmedia.com/#/blog",
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      description: p.excerpt,
+      datePublished: p.date,
+      url: `https://www.vibesdigitalmedia.com/#/blog/${p.slug}`,
+    })),
+  };
 
   return (
-    <RegionProvider>
-      <Layout>
-        <Section
-          eyebrow="Blog"
-          title="Growth insights & marketing playbooks"
-          desc="SEO, social, and conversion strategy — in plain English."
-        >
-          <div className="mx-auto max-w-4xl grid gap-4">
-            {posts.map((p) => (
-              <Link
-                key={p.slug}
-                to={`/blog/${p.slug}`}
-                className="rounded-2xl bg-slate-900/80 p-6 ring-1 ring-white/10 hover:ring-teal-400/30 transition-all"
-              >
-                <h3 className="text-xl font-semibold text-teal-200">{p.title}</h3>
-                <p className="mt-2 text-sm text-white/60">
-                  {p.date ? new Date(p.date).toDateString() : ""}
-                </p>
-                <p className="mt-3 text-white/70 leading-relaxed line-clamp-2">
-                  {p.excerpt || p.content?.slice(0, 140) || ""}
-                </p>
-              </Link>
-            ))}
-            {!posts.length && (
-              <div className="text-white/70 text-center py-10">
-                No posts yet.
+    <main className="min-h-screen bg-[#020817] text-white">
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+
+      <div className={`${container} py-16`}>
+        <h1 className="text-3xl font-extrabold">Blog</h1>
+        <p className="mt-2 max-w-2xl text-white/70">
+          Practical SEO + social media growth tips, broken down into steps you can execute.
+        </p>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
+          {posts.map((p) => (
+            <article key={p.slug} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <p className="text-xs uppercase tracking-wider text-white/55">{p.date}</p>
+              <h2 className="mt-2 text-xl font-bold">{p.title}</h2>
+              <p className="mt-2 text-white/70">{p.excerpt}</p>
+
+              <div className="mt-4">
+                <Link
+                  to={`/blog/${p.slug}`}
+                  className="inline-flex rounded-xl bg-white/10 px-4 py-2 text-sm font-semibold ring-1 ring-white/15 hover:bg-white/15"
+                >
+                  Read more →
+                </Link>
               </div>
-            )}
-          </div>
-        </Section>
-      </Layout>
-    </RegionProvider>
+            </article>
+          ))}
+        </div>
+      </div>
+    </main>
   );
 }
