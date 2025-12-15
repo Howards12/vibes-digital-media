@@ -48,6 +48,45 @@ export default function BlogPost() {
     publisher: { "@type": "Organization", name: "Vibes Digital Media" },
   };
 
+  // Custom markdown rendering to improve typography and support images/links nicely
+  const markdownComponents = {
+    a: ({ node, ...props }) => (
+      <a
+        {...props}
+        className="font-semibold text-teal-600 underline decoration-teal-400 hover:text-teal-700 hover:decoration-teal-500 dark:text-teal-300 dark:hover:text-teal-200"
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    ),
+    img: ({ node, ...props }) => (
+      // Ensure images from markdown are responsive and nicely styled
+      <img
+        {...props}
+        className="my-6 w-full max-w-full rounded-xl border border-white/10 object-contain"
+        loading="lazy"
+        alt={props.alt || ""}
+      />
+    ),
+    h1: ({ node, ...props }) => (
+      <h1 {...props} className="mt-10 text-3xl font-extrabold tracking-tight" />
+    ),
+    h2: ({ node, ...props }) => (
+      <h2 {...props} className="mt-8 text-2xl font-bold tracking-tight" />
+    ),
+    h3: ({ node, ...props }) => (
+      <h3 {...props} className="mt-6 text-xl font-semibold" />
+    ),
+    ul: ({ node, ...props }) => (
+      <ul {...props} className="mt-4 list-disc space-y-1 pl-5" />
+    ),
+    ol: ({ node, ...props }) => (
+      <ol {...props} className="mt-4 list-decimal space-y-1 pl-5" />
+    ),
+    p: ({ node, ...props }) => (
+      <p {...props} className="mt-4 leading-relaxed" />
+    ),
+  };
+
   return (
     <div className="min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -63,7 +102,9 @@ export default function BlogPost() {
         </p>
 
         <div className={`prose ${theme === 'dark' ? 'prose-invert' : ''} mt-8 max-w-none`}>
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+          <ReactMarkdown components={markdownComponents}>
+            {post.content}
+          </ReactMarkdown>
         </div>
       </div>
     </div>
