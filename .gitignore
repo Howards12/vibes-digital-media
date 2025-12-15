@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated project artifacts
+project-tree.txt
+project_context.txt
+project-files-content.txt
+

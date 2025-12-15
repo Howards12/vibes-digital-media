@@ -1,10 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { posts } from "./posts.js"; // ✅ Correct: Uses curly braces
+import { useBlogData } from "../hooks/useBlogData.js";
 
 const container = "mx-auto max-w-6xl px-4";
 
 export default function BlogList() {
+  const { posts, loading, error } = useBlogData();
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#020817] text-white">
+        <div className={`${container} py-16 text-center`}>Loading posts...</div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-[#020817] text-white">
+        <div className={`${container} py-16 text-center text-red-400`}>
+          Failed to load blog posts.
+        </div>
+      </main>
+    );
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",

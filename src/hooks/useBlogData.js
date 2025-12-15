@@ -43,10 +43,6 @@ function parseCsv(csvText) {
   return posts;
 }
 
-/**
- * Fetches and parses blog post data from a public Google Sheet CSV.
- * @returns {{ posts: Array<Object>, loading: boolean, error: Error | null }}
- */
 export function useBlogData() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,10 +52,40 @@ export function useBlogData() {
     fetch(GOOGLE_SHEET_CSV_URL)
       .then((response) => response.text())
       .then((csvText) => {
-        const parsedPosts = parseCsv(csvText);
-        // Sort posts by date, newest first
-        parsedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        setPosts(parsedPosts);
+        const rawRows = parseCsv(csvText);
+
+        // Normalize Google Sheet columns into the shape the app expects.
+        // Sheet headers:
+        // Status(Published/Draft), Title, Slug, Date, ReadTime, Excerpt, Content, featuredImage
+        const normalized = rawRows
+          .map((row) => ({
+            status: row["Status(Published/Draft)"]?.trim(),
+            title: row.Title,
+            slug: row.Slug,
+            date: row.Date,
+            readTime: row.ReadTime,
+            excerpt: row.Excerpt,
+            content: row.Content,
+            featuredImage: row.featuredImage,
+          }))
+          // Only include rows that look like valid, published posts
+          .filter(
+            (p) =>
+              p &&
+              p.status &&
+              p.status.toLowerCase() === "published" &&
+              p.slug &&
+              p.title
+          );
+
+        // Sort posts by date, newest first (if date present)
+        normalized.sort((a, b) => {
+          const dateA = a.date ? new Date(a.date) : 0;
+          const dateB = b.date ? new Date(b.date) : 0;
+          return dateB - dateA;
+        });
+
+        setPosts(normalized);
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
