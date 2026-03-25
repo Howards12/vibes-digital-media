@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/", // important for vibesdigitalmedia.com root
+  base: "./", // use relative asset paths for GitHub Pages
 });

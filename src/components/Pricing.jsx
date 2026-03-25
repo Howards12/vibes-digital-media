@@ -61,7 +61,7 @@ export default function Pricing() {
         price: (plan.priceUSD * activeRegion.fx).toFixed(0),
         priceCurrency: activeRegion.currency,
         availability: "https://schema.org/InStock",
-        url: "https://www.vibesdigitalmedia.com/#/contact",
+        url: "https://vibesdigitalmedia.org/#/contact",
       })),
     };
   }, [activeRegion]);

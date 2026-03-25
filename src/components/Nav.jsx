@@ -36,7 +36,7 @@ export default function Nav() {
       <nav className={`${container} flex items-center justify-between py-4`}>
         <Link to="/" className="flex items-center gap-4 group">
           <img
-            src="/assets/vibes-logo.png"
+            src="assets/vibes-logo.png"
             alt="Vibes Digital Media"
             className="h-16 w-auto transition-transform duration-300 group-hover:scale-105"
           />

@@ -80,7 +80,7 @@ export default function Navbar() {
         <div className={`${container} flex h-16 items-center justify-between`}>
           <Link to="/">
             <img
-              src={theme === 'dark' ? '/assets/logo-dark.png' : '/assets/logo-light.png'}
+              src={theme === 'dark' ? 'assets/logo-dark.png' : 'assets/logo-light.png'}
               alt="Vibes Digital Media Logo"
               className="h-16 w-auto"
             />

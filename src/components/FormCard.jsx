@@ -12,7 +12,7 @@ export default function FormCard({
     <div className="relative overflow-hidden rounded-3xl border border-teal-400/30 bg-slate-900/50 p-6 shadow-2xl shadow-teal-500/20">
       <div className="relative mb-4 flex items-center gap-4">
         <img
-          src="/assets/vibes-logo.png"
+          src="assets/vibes-logo.png"
           alt="Vibes Digital Media"
           className="h-12 w-auto"
         />

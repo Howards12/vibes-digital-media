@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://www.vibesdigitalmedia.com/sitemap.xml
+Sitemap: https://vibesdigitalmedia.org/sitemap.xml

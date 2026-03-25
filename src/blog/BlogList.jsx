@@ -29,13 +29,13 @@ export default function BlogList() {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: "Vibes Digital Media Blog",
-    url: "https://www.vibesdigitalmedia.com/#/blog",
+    url: "https://vibesdigitalmedia.org/#/blog",
     blogPost: posts.map((p) => ({
       "@type": "BlogPosting",
       headline: p.title,
       description: p.excerpt,
       datePublished: p.date,
-      url: `https://www.vibesdigitalmedia.com/#/blog/${p.slug}`,
+      url: `https://vibesdigitalmedia.org/#/blog/${p.slug}`,
     })),
   };
 

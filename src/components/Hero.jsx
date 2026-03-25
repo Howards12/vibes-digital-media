@@ -55,13 +55,13 @@ export default function Hero() {
     <section id="home" className="relative overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="/assets/hero-bg-light.png"
+          src="assets/hero-bg-light.png"
           alt=""
           className="absolute inset-0 h-full w-full object-cover blur-sm dark:hidden"
           aria-hidden="true"
         />
         <img
-          src="/assets/hero-bg-light.png"
+          src="assets/hero-bg-light.png"
           alt=""
           className="absolute inset-0 hidden h-full w-full object-cover blur-sm dark:block"
           aria-hidden="true"

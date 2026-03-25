@@ -43,7 +43,7 @@ export default function BlogPost() {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    url: `https://www.vibesdigitalmedia.com/#/blog/${post.slug}`,
+    url: `https://vibesdigitalmedia.org/#/blog/${post.slug}`,
     author: { "@type": "Organization", name: "Vibes Digital Media" },
     publisher: { "@type": "Organization", name: "Vibes Digital Media" },
   };
