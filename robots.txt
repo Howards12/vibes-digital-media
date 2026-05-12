@@ -1,0 +1,5 @@
+# Allow all crawlers full access
+User-agent: *
+Disallow:
+
+Sitemap: https://vibesdigitalmedia.org/sitemap.xml
