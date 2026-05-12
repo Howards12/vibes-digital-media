@@ -9,36 +9,39 @@ export default function Presence() {
   const [containerRef, isContainerInView] = useInView({ threshold: 0.1 });
   const cardThemeClasses = {
     light: {
-      card: "bg-white ring-1 ring-gray-200 hover:bg-gray-50",
-      title: "text-teal-600",
-      body: "text-gray-600",
+      card: "rounded-3xl bg-white shadow-soft ring-1 ring-slate-900/[0.06] hover:-translate-y-1 hover:shadow-lift",
+      title: "text-teal-700",
+      body: "text-slate-600",
     },
     dark: {
-      card: "bg-slate-900/80 ring-1 ring-white/10 hover:bg-slate-900/70",
-      title: "text-teal-200",
-      body: "text-white/70",
+      card: "rounded-3xl bg-slate-900/75 shadow-lift ring-1 ring-white/[0.08] hover:-translate-y-1",
+      title: "text-teal-300",
+      body: "text-slate-400",
     },
   };
 
   return (
     <Section
       id="presence"
+      tone="muted"
       eyebrow="Where We Operate"
       title="Local nuance, global coverage"
       desc="Tailored strategies per region."
     >
-      <div ref={containerRef} className="grid gap-6 md:grid-cols-2 lg:grid-cols-5 text-base">
+      <div ref={containerRef} className="grid gap-6 text-base md:grid-cols-2 lg:grid-cols-5">
         {presenceTiles.map((tile, index) => (
           <div
             key={tile.title}
-            className={`rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-1 ${
+            className={`p-6 transition-all duration-500 ease-out sm:p-7 ${
               cardThemeClasses[theme].card
-            } ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            } ${isContainerInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <div className="flex items-center gap-3 mb-3">
+            <div className="mb-4 flex items-center gap-3">
               <span className="text-2xl">{tile.flag}</span>
-              <h3 className={`text-lg font-semibold ${cardThemeClasses[theme].title}`}>{tile.title}</h3>
+              <h3 className={`font-display text-lg font-semibold tracking-tight ${cardThemeClasses[theme].title}`}>
+                {tile.title}
+              </h3>
             </div>
             <p className={`leading-relaxed ${cardThemeClasses[theme].body}`}>{tile.body}</p>
           </div>

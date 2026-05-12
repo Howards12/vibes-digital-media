@@ -13,8 +13,9 @@ export default function Pricing() {
 
   const themeClasses = {
     light: {
-      card: "bg-white ring-1 ring-gray-200",
-      featuredCard: "bg-slate-900 text-white ring-2 ring-slate-900",
+      card: "rounded-3xl bg-white shadow-soft ring-1 ring-slate-900/[0.06] hover:-translate-y-1 hover:shadow-lift",
+      featuredCard:
+        "rounded-3xl bg-slate-900 text-white shadow-glow ring-2 ring-teal-500/30 hover:-translate-y-1",
       name: "text-teal-600",
       featuredName: "text-teal-200",
       price: "text-gray-900",
@@ -28,8 +29,9 @@ export default function Pricing() {
       badge: "bg-teal-500 text-white shadow-lg",
     },
     dark: {
-      card: "bg-slate-900/80 ring-1 ring-white/10",
-      featuredCard: "bg-slate-800 ring-2 ring-teal-300",
+      card: "rounded-3xl bg-slate-900/80 shadow-lift ring-1 ring-white/[0.08] hover:-translate-y-1",
+      featuredCard:
+        "rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 shadow-glow ring-2 ring-teal-400/40 hover:-translate-y-1",
       name: "text-teal-200",
       featuredName: "text-teal-200",
       price: "text-white",
@@ -67,7 +69,7 @@ export default function Pricing() {
   }, [activeRegion]);
 
   return (
-    <Section id="pricing" eyebrow="Pricing" title="Plans that scale with you">
+    <Section id="pricing" tone="muted" eyebrow="Pricing" title="Plans that scale with you">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <div ref={containerRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 lg:items-start">
         {pricingPlans.map((plan, index) => {
@@ -83,9 +85,9 @@ export default function Pricing() {
           return (
             <div
               key={plan.name}
-              className={`relative rounded-2xl p-6 transition-all duration-500 ease-out ${
-                isFeatured ? "transform lg:scale-110" : ""
-              } ${cardClasses} ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+              className={`relative p-6 transition-all duration-500 ease-out sm:p-7 ${
+                isFeatured ? "transform lg:scale-[1.04]" : ""
+              } ${cardClasses} ${isContainerInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               {isFeatured && (
@@ -95,7 +97,7 @@ export default function Pricing() {
                   </span>
                 </div>
               )}
-              <h3 className={`text-lg font-semibold ${nameClasses}`}>{plan.name}</h3>
+              <h3 className={`font-display text-lg font-semibold tracking-tight ${nameClasses}`}>{plan.name}</h3>
               <p className={`mt-2 ${descClasses}`}>{plan.desc}</p>
               <p className="mt-6">
                 <span className="text-4xl font-bold tracking-tight">
@@ -106,7 +108,7 @@ export default function Pricing() {
               </p>
               <Link
                 to="/contact"
-                className={`mt-8 block w-full rounded-lg py-3 px-6 text-center text-sm font-semibold transition-colors ${buttonClasses}`}
+                className={`mt-8 block w-full rounded-full py-3.5 px-6 text-center text-sm font-semibold transition hover:-translate-y-0.5 ${buttonClasses}`}
               >
                 Get Started
               </Link>

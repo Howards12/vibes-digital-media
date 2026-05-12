@@ -13,10 +13,10 @@ export function ThemeProvider({ children }) {
   });
 
   useEffect(() => {
-    // Apply theme to the root element and save to local storage
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
+    root.dataset.theme = theme;
     localStorage.setItem("theme", theme);
   }, [theme]);
 

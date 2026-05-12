@@ -36,20 +36,21 @@ export default function ServicesSection() {
 
   const cardThemeClasses = {
     light: {
-      card: "bg-white ring-1 ring-gray-200 hover:ring-teal-500/50",
-      title: "text-teal-600",
-      body: "text-gray-600",
+      card: "rounded-3xl bg-white shadow-soft ring-1 ring-slate-900/[0.06] hover:-translate-y-1 hover:shadow-lift hover:ring-teal-500/25",
+      title: "text-teal-700",
+      body: "text-slate-600",
     },
     dark: {
-      card: "bg-slate-900/70 ring-1 ring-white/10 hover:ring-teal-400/30",
-      title: "text-teal-200",
-      body: "text-white/70",
+      card: "rounded-3xl bg-slate-900/80 shadow-lift ring-1 ring-white/[0.08] hover:-translate-y-1 hover:ring-teal-400/25",
+      title: "text-teal-300",
+      body: "text-slate-400",
     },
   };
 
   return (
     <Section
       id="services"
+      tone="muted"
       eyebrow="What We Do"
       title="Performance-led SEO & SMO for modern brands"
       desc="We blend technical search, strategic content, and thumb-stopping social."
@@ -58,15 +59,21 @@ export default function ServicesSection() {
         {services.map((s, index) => (
           <div
             key={s.title}
-            className={`rounded-2xl p-6 transition-all duration-500 ease-out hover:-translate-y-1 ${
+            className={`p-6 transition-all duration-500 ease-out sm:p-7 ${
               cardThemeClasses[theme].card
-            } ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            } ${isContainerInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <div className={`mb-4 inline-block p-3 rounded-lg ${theme === 'dark' ? 'bg-slate-800' : 'bg-teal-50'}`}>
+            <div
+              className={`mb-5 inline-flex rounded-2xl p-3.5 ${
+                theme === "dark" ? "bg-white/[0.06] ring-1 ring-white/10" : "bg-teal-50 ring-1 ring-teal-100"
+              }`}
+            >
               <s.Icon className={`h-6 w-6 ${cardThemeClasses[theme].title}`} />
             </div>
-            <h3 className={`mb-3 text-lg font-semibold ${cardThemeClasses[theme].title}`}>{s.title}</h3>
+            <h3 className={`mb-3 font-display text-lg font-semibold tracking-tight ${cardThemeClasses[theme].title}`}>
+              {s.title}
+            </h3>
             <p className={`text-base leading-relaxed ${cardThemeClasses[theme].body}`}>{s.body}</p>
           </div>
         ))}

@@ -10,30 +10,36 @@ export default function Results() {
 
   const cardThemeClasses = {
     light: {
-      card: "bg-white ring-1 ring-gray-200 hover:bg-gray-50",
-      stat: "text-teal-500",
-      label: "text-gray-600",
+      card: "rounded-3xl bg-white/90 shadow-soft ring-1 ring-slate-900/[0.06] hover:-translate-y-1 hover:shadow-lift",
+      stat: "bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent",
+      label: "text-slate-600",
     },
     dark: {
-      card: "bg-slate-900/80 ring-1 ring-white/10 hover:bg-slate-900/70",
-      stat: "text-teal-300",
-      label: "text-white/70",
+      card: "rounded-3xl bg-slate-900/70 shadow-lift ring-1 ring-white/[0.08] hover:-translate-y-1",
+      stat: "bg-gradient-to-r from-teal-200 to-cyan-300 bg-clip-text text-transparent",
+      label: "text-slate-400",
     },
   };
 
   return (
-    <Section id="results" eyebrow="Proof" title="Built for measurable growth">
+    <Section id="results" tone="spotlight" eyebrow="Proof" title="Built for measurable growth">
       <div ref={containerRef} className="grid gap-8 md:grid-cols-3">
         {resultsStats.map((statItem, index) => (
           <div
             key={statItem.stat}
-            className={`rounded-2xl p-8 text-center transition-all duration-500 ease-out hover:-translate-y-1 ${
+            className={`p-8 text-center transition-all duration-500 ease-out sm:p-10 ${
               cardThemeClasses[theme].card
-            } ${isContainerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            } ${isContainerInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            <div className={`mb-4 text-3xl font-extrabold ${cardThemeClasses[theme].stat}`}>{statItem.stat}</div>
-            <p className={`text-lg leading-relaxed ${cardThemeClasses[theme].label}`}>{statItem.label}</p>
+            <div
+              className={`font-display mb-4 text-4xl font-bold tracking-tight sm:text-5xl ${cardThemeClasses[theme].stat}`}
+            >
+              {statItem.stat}
+            </div>
+            <p className={`text-base font-medium leading-relaxed sm:text-lg ${cardThemeClasses[theme].label}`}>
+              {statItem.label}
+            </p>
           </div>
         ))}
       </div>

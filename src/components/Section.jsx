@@ -1,47 +1,77 @@
 import React from "react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useInView } from "../hooks/useInView.js";
-const container = "mx-auto max-w-6xl px-4";
 
-export default function Section({ id, eyebrow, title, desc, children }) {
-  const [headerRef, isHeaderInView] = useInView({ threshold: 0.3 });
+export const container = "mx-auto max-w-7xl px-5 sm:px-6 lg:px-8";
+
+const toneBg = {
+  light: {
+    default: "",
+    muted: "bg-slate-100/70",
+    spotlight: "bg-gradient-to-b from-white via-slate-50/80 to-slate-100/60",
+  },
+  dark: {
+    default: "",
+    muted: "bg-slate-900/40",
+    spotlight: "bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950",
+  },
+};
+
+export default function Section({ id, eyebrow, title, desc, children, tone = "default" }) {
+  const [headerRef, isHeaderInView] = useInView({ threshold: 0.25 });
   const { theme } = useTheme();
 
   const themeClasses = {
     light: {
-      eyebrow: "text-teal-600",
-      title: "text-gray-900",
-      desc: "text-gray-600",
+      eyebrow: "text-teal-700",
+      title: "text-slate-900",
+      desc: "text-slate-600",
+      line: "from-teal-500 to-emerald-500",
     },
     dark: {
-      eyebrow: "text-teal-200",
+      eyebrow: "text-teal-300",
       title: "text-white",
-      desc: "text-white/80",
+      desc: "text-slate-400",
+      line: "from-teal-300 to-cyan-400",
     },
   };
 
+  const bg = toneBg[theme][tone] || "";
+
   return (
-    <section id={id} className="relative py-16 sm:py-24">
+    <section id={id} className={`relative py-20 sm:py-28 ${bg}`}>
       <div className={container}>
         {(eyebrow || title) && (
           <header
             ref={headerRef}
-            className={`mb-12 text-center transition-all duration-700 ease-out ${
-              isHeaderInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`mb-14 text-center transition-all duration-700 ease-out ${
+              isHeaderInView ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
             }`}
           >
             {eyebrow && (
-              <p className={`mb-3 text-sm font-semibold uppercase tracking-[0.22em] ${themeClasses[theme].eyebrow}`}>
-                {eyebrow}
-              </p>
+              <div className="mb-4 flex flex-col items-center gap-3">
+                <span
+                  className={`h-1 w-12 rounded-full bg-gradient-to-r ${themeClasses[theme].line}`}
+                  aria-hidden
+                />
+                <p
+                  className={`text-xs font-bold uppercase tracking-[0.28em] ${themeClasses[theme].eyebrow}`}
+                >
+                  {eyebrow}
+                </p>
+              </div>
             )}
             {title && (
-              <h2 className={`mx-auto max-w-3xl text-3xl font-bold leading-tight sm:text-4xl ${themeClasses[theme].title}`}>
+              <h2
+                className={`font-display mx-auto max-w-3xl text-3xl font-bold leading-tight tracking-tight text-balance sm:text-4xl lg:text-[2.75rem] ${themeClasses[theme].title}`}
+              >
                 {title}
               </h2>
             )}
             {desc && (
-              <p className={`mx-auto mt-6 max-w-3xl text-lg leading-relaxed ${themeClasses[theme].desc}`}>
+              <p
+                className={`mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-balance ${themeClasses[theme].desc}`}
+              >
                 {desc}
               </p>
             )}
@@ -52,5 +82,3 @@ export default function Section({ id, eyebrow, title, desc, children }) {
     </section>
   );
 }
-
-export { container };
